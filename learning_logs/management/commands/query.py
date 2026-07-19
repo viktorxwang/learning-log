@@ -12,8 +12,16 @@ class Command(BaseCommand):
 
         if len(topics) == 0:
             self.stdout.write(self.style.ERROR("Found no topics."))
+            return
         else:
             self.stdout.write(self.style.SUCCESS(f"There are {len(topics)} topics."))
             
         for topic in topics:
             self.stdout.write(f"{topic.id} {topic}")
+
+        # We get the attributes of the topic with ID 1, this is the first topic. [0]
+        t = Topic.objects.get(id=1)
+        self.stdout.write("\nAttributes of the first topic:")
+        self.stdout.write(f"Name: {t.text}")
+        self.stdout.write(f"Date added: {t.date_added}")
+        self.stdout.write(f"{t.entry_set.all()}")
