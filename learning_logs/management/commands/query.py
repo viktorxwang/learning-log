@@ -15,7 +15,8 @@ class Command(BaseCommand):
             return
         else:
             self.stdout.write(self.style.SUCCESS(f"There are {len(topics)} topics."))
-            
+        
+        # Enumerate the topics with their topic.id
         for topic in topics:
             self.stdout.write(f"{topic.id} {topic}")
 
