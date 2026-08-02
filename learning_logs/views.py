@@ -13,3 +13,12 @@ def topics(request):
     topics = Topic.objects.order_by("date_added")
     context = {"topics" : topics} # Passes info to the template
     return render(request, "learning_logs/topics.html", context)
+
+def topic(request, topic_id):
+    """Shows one topic, which is at <int:topic_id>"""
+    # Referring to a .models is a query.
+    topic = Topic.objects.get(id = topic_id)
+    entries = topic.entry_set.order_by("-date_added") # The most recent entries appear at the topic
+    # We need two elements in context, the topic, and its entries
+    context = {"topic" : topic, "entries" : entries}
+    return render(request, "learning_logs/topic.html", context)
