@@ -1,0 +1,7 @@
+<!-- The home page link will be put on every page. -->
+<p>
+    <a href="{% url 'learning_logs:index' %}">Learning Log</a> - 
+    <a href="{% url 'learning_logs:topics' %}">Topics</a>
+</p>
+
+{% block content %}{% endblock content %}
