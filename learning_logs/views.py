@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from .models import Topic
-from .forms import TopicForm
+from .models import Topic # We don't need to import Entry since it is implicit
+from .forms import TopicForm, EntryForm
 
 # Create your views here.
 
@@ -39,3 +39,27 @@ def new_topic(request):
     # Display a blank or invalid form.
     context = {'form' : form}
     return render(request, 'learning_logs/new_topic.html', context)
+
+def new_entry(request, topic_id):
+    """Add a new entry for a particular topic."""
+    # Get the topic from the topic.id
+    topic = Topic.objects.get(id=topic.id)
+
+    # If we aren't posting a entry somehow
+    if request.method != "POST":
+        # No data submitted, we create a blank form
+        form = EntryForm()
+    else:
+        # POST data is submitted, we relay the data
+        form = EntryForm(data = request.POST)
+        if form.is_valid(): # is_valid() is a function
+            new_entry = form.save(commit = False)
+            new_entry.topic = topic # personal topic for new_entry
+            new_entry.save()
+            return redirect('learning_logs:topic', topic_id=topic_id)
+
+    # Display a blank or invalid form.
+    context = {'topic' : topic, 'form' : form}
+    # topic id doesn't have to be restated within the link
+    return redirect(request, "learning_logs/new_entry.html", context) 
+    
