@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from .models import Topic # We don't need to import Entry since it is implicit
+from .models import Topic, Entry # We don't need to import Entry since it is implicit
 from .forms import TopicForm, EntryForm
 
 # Create your views here.
@@ -62,4 +62,22 @@ def new_entry(request, topic_id):
     context = {'topic' : topic, 'form' : form}
     # topic id doesn't have to be restated within the link
     return render(request, "learning_logs/new_entry.html", context)
-    
+
+def edit_entry(request, entry_id):
+    """Edit an existing entry. We need the entry_id, which is found through the total entry list."""
+    entry = Entry.objects.get(id = entry_id)
+    topic = entry.topic
+
+    if request.method != "POST":
+        # Initial request; prefill form with the current entry.
+        form = EntryForm(instance = entry)
+    else:
+        # POST data submitted, process data
+        form = EntryForm(instance = entry, data = request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('learning_logs:topic', topic_id=topic.id)
+
+    # Now we pass the context to render a template
+    context = {"entry" : entry, "topic" : topic, "form" : form}
+    return render(request, 'learning_logs/edit_entry.html', context)
