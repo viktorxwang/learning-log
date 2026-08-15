@@ -24,4 +24,6 @@ urlpatterns = [
     # Includes the URLs from the learning_logs app as the default
     # learning_logs/urls.py overrides learning_log/urls.py
     path('', include('learning_logs.urls')),
+    # also add the users/ urlpatterns
+    path('users/', include("users.urls")),
 ]
