@@ -20,7 +20,8 @@ logged in, they're redirected to the login page.
 @login_required
 def topics(request):
     """Shows all topics."""
-    topics = Topic.objects.order_by("date_added")
+    # Only show the topics that belong to the logged in user
+    topics = Topic.objects.filter(owner=request.user).order_by("date_added")
     context = {"topics" : topics} # Passes info to the template
     return render(request, "learning_logs/topics.html", context)
 
