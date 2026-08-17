@@ -26,4 +26,5 @@ urlpatterns = [
     path('', include('learning_logs.urls')),
     # also add the users/ urlpatterns
     path('users/', include("users.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]

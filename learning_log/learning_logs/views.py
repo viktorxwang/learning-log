@@ -10,6 +10,13 @@ def index(request):
     """The home page for Learning Log."""
     return render(request, 'learning_logs/index.html')
 
+"""
+The topics view is created with the login_required decorator, meaning that 
+the code in login_required will run before every call of topics.
+The code in login_required() checks whether a user is logged in,
+and Django runs the code in topics() only if they are. If the user isn't
+logged in, they're redirected to the login page.
+"""
 @login_required
 def topics(request):
     """Shows all topics."""
