@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .models import Topic, Entry # We don't need to import Entry since it is implicit
 from .forms import TopicForm, EntryForm
@@ -9,6 +10,7 @@ def index(request):
     """The home page for Learning Log."""
     return render(request, 'learning_logs/index.html')
 
+@login_required
 def topics(request):
     """Shows all topics."""
     topics = Topic.objects.order_by("date_added")
