@@ -24,6 +24,7 @@ def topics(request):
     context = {"topics" : topics} # Passes info to the template
     return render(request, "learning_logs/topics.html", context)
 
+@login_required
 def topic(request, topic_id):
     """Shows one topic, which is at <int:topic_id>"""
     # Referring to a .models is a query.
@@ -33,6 +34,7 @@ def topic(request, topic_id):
     context = {"topic" : topic, "entries" : entries}
     return render(request, "learning_logs/topic.html", context)
 
+@login_required
 def new_topic(request):
     """Add a new topic."""
     if request.method != "POST":
@@ -49,6 +51,7 @@ def new_topic(request):
     context = {'form' : form}
     return render(request, 'learning_logs/new_topic.html', context)
 
+@login_required
 def new_entry(request, topic_id):
     """Add a new entry for a particular topic."""
     # Get the topic from the topic_id
@@ -72,6 +75,7 @@ def new_entry(request, topic_id):
     # topic id doesn't have to be restated within the link
     return render(request, "learning_logs/new_entry.html", context)
 
+@login_required
 def edit_entry(request, entry_id):
     """Edit an existing entry. We need the entry_id, which is found through the total entry list."""
     entry = Entry.objects.get(id = entry_id)
