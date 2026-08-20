@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import Topic, Entry # We don't need to import Entry since it is implicit
 from .forms import TopicForm, EntryForm
@@ -30,10 +31,15 @@ def topic(request, topic_id):
     """Shows one topic, which is at <int:topic_id>"""
     # Referring to a .models is a query.
     topic = Topic.objects.get(id = topic_id)
+    # Make sure the topic belongs to the current user.
+    if topic.owner != request.user:
+        raise Http404 # creates http 404 error
+    
     entries = topic.entry_set.order_by("-date_added") # The most recent entries appear at the topic
     # We need two elements in context, the topic, and its entries
     context = {"topic" : topic, "entries" : entries}
     return render(request, "learning_logs/topic.html", context)
+
 
 @login_required
 def new_topic(request):
