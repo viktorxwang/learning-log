@@ -88,6 +88,11 @@ def edit_entry(request, entry_id):
     entry = Entry.objects.get(id = entry_id)
     topic = entry.topic
 
+    # We need to protext this page so no one
+    # can use the URL to gain access to someone else's entries.
+    if topic.owner != request.user:
+        raise Http404
+    
     if request.method != "POST":
         # Initial request; prefill form with the current entry.
         form = EntryForm(instance = entry)
