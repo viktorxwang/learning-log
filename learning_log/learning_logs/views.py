@@ -100,7 +100,11 @@ def edit_entry(request, entry_id):
         # POST data submitted, process data
         form = EntryForm(instance = entry, data = request.POST)
         if form.is_valid():
-            form.save()
+            # We need to modify the new topic before saving to the database
+            # form.save()
+            new_topic = form.save(commit = False)
+            new_topic.owner = request.user
+            new_topic.save()
             return redirect('learning_logs:topic', topic_id=topic.id)
 
     # Now we pass the context to render a template
