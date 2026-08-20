@@ -5,6 +5,13 @@ from django.http import Http404
 from .models import Topic, Entry # We don't need to import Entry since it is implicit
 from .forms import TopicForm, EntryForm
 
+# Refactoring
+
+def check_topic_owner(request, topic):
+    # topic is considered root, so only need to check topic ownership
+    if topic.owner != request.user:
+        raise Http404
+    
 # Create your views here.
 
 def index(request):
@@ -29,11 +36,11 @@ def topics(request):
 @login_required
 def topic(request, topic_id):
     """Shows one topic, which is at <int:topic_id>"""
+
     # Referring to a .models is a query.
     topic = Topic.objects.get(id = topic_id)
     # Make sure the topic belongs to the current user.
-    if topic.owner != request.user:
-        raise Http404 # creates http 404 error
+    check_topic_owner(request, topic)
     
     entries = topic.entry_set.order_by("-date_added") # The most recent entries appear at the topic
     # We need two elements in context, the topic, and its entries
@@ -61,8 +68,11 @@ def new_topic(request):
 @login_required
 def new_entry(request, topic_id):
     """Add a new entry for a particular topic."""
+
     # Get the topic from the topic_id
     topic = Topic.objects.get(id=topic_id)
+    # Only the user's topics show up
+    check_topic_owner(request, topic)
 
     # If we aren't posting a entry somehow
     if request.method != "POST":
@@ -90,8 +100,7 @@ def edit_entry(request, entry_id):
 
     # We need to protext this page so no one
     # can use the URL to gain access to someone else's entries.
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
     
     if request.method != "POST":
         # Initial request; prefill form with the current entry.
