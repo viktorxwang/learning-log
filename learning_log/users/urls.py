@@ -1,14 +1,15 @@
-"""Defines URL patterns for users."""
-
 from django.urls import path, include
-
 from . import views
 
 app_name = "users"
-urlpatterns = [
-    # Include default auth urls.
-    path('', include('django.contrib.auth.urls')), # Sends the user to http://localhost:8000/users/login
-    # Registration page.
-    path('register/', views.register, name="register")
 
+urlpatterns = [
+    # Custom logout MUST come before Django's built-in auth URLs.
+    path("logout/", views.logout_view, name="logout"),
+
+    # Django's built-in login/password URLs.
+    path("", include("django.contrib.auth.urls")),
+
+    # Custom registration.
+    path("register/", views.register, name="register"),
 ]
