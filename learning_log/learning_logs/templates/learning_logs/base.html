@@ -1,16 +1,29 @@
-<!-- The home page link will be put on every page. -->
-<p>
-    <a href="{% url 'learning_logs:index' %}">Learning Log</a> - 
-    <a href="{% url 'learning_logs:topics' %}">Topics</a> - 
-    {% if user.is_authenticated %}
-        Hello, {{ user.username }}
-        <a href="{% url 'users:logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'users:register' %}">Register</a> - 
-        <a href="{% url 'users:login' %}">Log in</a>
-    {% endif %}
-    <a href="{% url 'learning_logs:topics' %}">Topics</a> - 
-    <a href="{% url 'learning_logs:new_topic' %}">New Topic</a>
-</p>
+{% load bootstrap4 %}
 
-{% block content %}{% endblock content %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+        shrink-to-fit=no">
+    <title>Learning Log</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery="full" %}
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+
+        <a class="nav-brand" href="{% url 'learning_logs:index' %}">
+            Learning Log
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-iron"></span></button>
+    </nav>
+</body>
+</html>
